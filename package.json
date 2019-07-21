@@ -1,0 +1,14 @@
+{
+  "name": "cordova-plugin-jziot",
+  "version": "0.1.0",
+  "description": "Cordova Plugin for JZIOT V9000",
+  "cordova": {
+    "id": "cordova-plugin-jziot",
+    "platforms": []
+  },
+  "keywords": [
+    "ecosystem:cordova"
+  ],
+  "author": "Juan Carlos Flores",
+  "license": "ISC"
+}
