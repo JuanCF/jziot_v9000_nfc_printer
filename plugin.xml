@@ -12,8 +12,7 @@
     </config-file>
     <config-file parent="/*" target="AndroidManifest.xml"></config-file>
     <source-file src="src/android/jziotPrinter.java" target-dir="src/cordova-plugin-jziot/jziotPrinter" />
-    <source-file src="src/android/libs/arm64-v8a/libaacdecoder.so" target-dir="jniLibs/arm64-v8a/" />
-    <source-file src="src/android/libs/armeabi/libaacdecoder.so" target-dir="jniLibs/armeabi/" />
-    <source-file src="src/android/libs/armeabi-v7a/libaacdecoder.so" target-dir="jniLibs/armeabi-v7a/" />
+    <source-file src="src/android/jniLibs/armeabi/libPosApi.so" target-dir="jniLibs/armeabi/" />
+    <source-file src="src/android/jniLibs/armeabi/libzyapi_common.so" target-dir="jniLibs/armeabi/" />
   </platform>
 </plugin>
