@@ -12,6 +12,8 @@
     </config-file>
     <config-file parent="/*" target="AndroidManifest.xml"></config-file>
     <source-file src="src/android/jziotPrinter.java" target-dir="src/cordova-plugin-jziot/jziotPrinter" />
+    <source-file src="src/android/libs/core.jar" target-dir="src/android/zyapi/" />
+    <source-file src="src/android/libs/zypos1.5.jar" target-dir="src/android/zyapi/" />
     <source-file src="src/android/jniLibs/armeabi/libPosApi.so" target-dir="jniLibs/armeabi/" />
     <source-file src="src/android/jniLibs/armeabi/libzyapi_common.so" target-dir="jniLibs/armeabi/" />
   </platform>
