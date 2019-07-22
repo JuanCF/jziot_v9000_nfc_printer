@@ -1,7 +1,13 @@
+buildscript {
+    repositories {
+        jcenter()
+        google()
+    }
+}
+
 repositories {
-    mavenCentral()
     jcenter()
-    maven { url "https://jitpack.io" }
+    google()
     flatDir {
        dirs 'src/main/libs'
     }
