@@ -7,6 +7,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.zyapi.PrintQueue;
+import android.zyapi.PrintQueue.OnPrintListener;
+
 /**
  * This class echoes a string called from JavaScript.
  */
