@@ -8,9 +8,6 @@ buildscript {
 repositories {
     jcenter()
     google()
-    flatDir {
-       dirs 'src/main/libs'
-    }
 }
 
 dependencies {
