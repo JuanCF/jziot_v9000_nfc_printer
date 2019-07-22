@@ -1,0 +1,14 @@
+repositories {
+    mavenCentral()
+    jcenter()
+    maven { url "https://jitpack.io" }
+    flatDir {
+       dirs 'src/main/libs'
+    }
+}
+
+dependencies {
+    implementation 'com.android.support:support-v4:22.2.1'
+    implementation files('libs/core.jar')
+    implementation files('libs/zypos1.5.jar')
+}
