@@ -7,6 +7,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.posapi.PosApi;
 import android.zyapi.PrintQueue;
 import android.zyapi.PrintQueue.OnPrintListener;
 
@@ -14,6 +15,10 @@ import android.zyapi.PrintQueue.OnPrintListener;
  * This class echoes a string called from JavaScript.
  */
 public class jziotPrinter extends CordovaPlugin {
+
+    private PosApi mPosApi;
+
+    private PrintQueue mPrintQueue = null;
 
     @Override
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
