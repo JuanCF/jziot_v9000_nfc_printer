@@ -7,6 +7,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.content.Context;
 import android.posapi.PosApi;
 import android.zyapi.PrintQueue;
 import android.zyapi.PrintQueue.OnPrintListener;
@@ -26,6 +27,9 @@ public class jziotPrinter extends CordovaPlugin {
             String message = args.getString(0);
             this.coolMethod(message, callbackContext);
             return true;
+        } else if("turnOnPrinter".equals(action)){
+            turnOnPrinter(callbackContext);
+            return true;
         }
         return false;
     }
@@ -37,4 +41,16 @@ public class jziotPrinter extends CordovaPlugin {
             callbackContext.error("Expected one non-empty string argument.");
         }
     }
+
+    private void turnOnPrinter(CallbackContext callbackContext) {
+      int last_module_flag = module_flag;
+      mPosApi = getInstance().getPosApi();
+      Context context = cordova.getActivity().getApplicationContext();
+      //callbackContext.error("AIDL Service not connected");
+      cordova.getThreadPool().execute(new Runnable() {
+          public void run() {
+            callbackContext.success("Hola");
+          }
+      });
+	}
 }
