@@ -43,7 +43,7 @@ public class jziotPrinter extends CordovaPlugin {
     }
 
     private void turnOnPrinter(CallbackContext callbackContext) {
-      mPosApi = App.getInstance().getPosApi();
+      mPosApi = PosApi.getInstance(this);
       Context context = cordova.getActivity().getApplicationContext();
       //callbackContext.error("AIDL Service not connected");
       cordova.getThreadPool().execute(new Runnable() {
