@@ -22,5 +22,8 @@
     <source-file src="src/android/libs/zypos1.5.jar" target-dir="libs/" />
     <source-file src="src/android/jniLibs/armeabi/libPosApi.so" target-dir="jniLibs/armeabi/" />
     <source-file src="src/android/jniLibs/armeabi/libzyapi_common.so" target-dir="jniLibs/armeabi/" />
+    <!-- Only for Cordova android 7, not correctly loading jniLibs -->
+    <source-file src="src/android/jniLibs/armeabi/libPosApi.so" target-dir="app/src/main/jniLibs/armeabi/" />
+    <source-file src="src/android/jniLibs/armeabi/libzyapi_common.so" target-dir="app/src/main/jniLibs/armeabi/" />
   </platform>
 </plugin>
