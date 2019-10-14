@@ -8,7 +8,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Context;
+import android.widget.Toast;
 import android.posapi.PosApi;
+import android.posapi.PosApi.OnCommEventListener;
 import android.zyapi.PrintQueue;
 import android.zyapi.PrintQueue.OnPrintListener;
 
@@ -42,9 +44,28 @@ public class jziotPrinter extends CordovaPlugin {
         }
     }
 
+    OnCommEventListener mCommEventListener = new OnCommEventListener() {
+		@Override
+		public void onCommState(int cmdFlag, int state, byte[] resp, int respLen) {
+            Context context = cordova.getActivity().getApplicationContext();
+			// TODO Auto-generated method stub
+			switch(cmdFlag){
+			case PosApi.POS_INIT:
+				if(state==PosApi.COMM_STATUS_SUCCESS){
+					Toast.makeText(context, "Inicialización exitosa", Toast.LENGTH_SHORT).show();
+				}else {
+					Toast.makeText(context, "Inicialización fallida", Toast.LENGTH_SHORT).show();
+				}
+				break;
+			}
+		}
+	}
+
     private void turnOnPrinter(CallbackContext callbackContext) {
       Context context = cordova.getActivity().getApplicationContext();
       mPosApi = PosApi.getInstance(context);
+      mPosApi.setOnComEventListener(mCommEventListener);
+      mPosApi.initDeviceEx("/dev/ttyMT2");
       //callbackContext.error("AIDL Service not connected");
       cordova.getThreadPool().execute(new Runnable() {
           public void run() {
