@@ -30,7 +30,7 @@ public class jziotPrinter extends CordovaPlugin {
             this.coolMethod(message, callbackContext);
             return true;
         } else if("turnOnPrinter".equals(action)){
-            turnOnPrinter(callbackContext);
+            this.turnOnPrinter(callbackContext);
             return true;
         }
         return false;
@@ -59,7 +59,7 @@ public class jziotPrinter extends CordovaPlugin {
 				break;
 			}
 		}
-	}
+	};
 
     private void turnOnPrinter(CallbackContext callbackContext) {
       Context context = cordova.getActivity().getApplicationContext();
