@@ -1,5 +1,8 @@
 package cordova.plugin.jziot;
 
+import java.io.File;
+import java.io.FileWriter;
+
 import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.CallbackContext;
 
@@ -29,8 +32,11 @@ public class jziotPrinter extends CordovaPlugin {
             String message = args.getString(0);
             this.coolMethod(message, callbackContext);
             return true;
-        } else if("turnOnPrinter".equals(action)){
+        } else if(action.equals("turnOnPrinter")){
             this.turnOnPrinter(callbackContext);
+            return true;
+        } else if(action.equals("turnOffPrinter")){
+            this.turnOffPrinter(callbackContext);
             return true;
         }
         return false;
@@ -63,14 +69,40 @@ public class jziotPrinter extends CordovaPlugin {
 
     private void turnOnPrinter(CallbackContext callbackContext) {
       Context context = cordova.getActivity().getApplicationContext();
+
+      try {
+          FileWriter localFileWriterOn = new FileWriter(new File("/proc/gpiocontrol/set_sam"));
+          localFileWriterOn.write("1");
+          localFileWriterOn.close();
+      } catch (Exception e) {
+          callbackContext.error("Controller can not enabled");
+          e.printStackTrace();
+      }
+
       mPosApi = PosApi.getInstance(context);
       mPosApi.setOnComEventListener(mCommEventListener);
       mPosApi.initDeviceEx("/dev/ttyMT2");
-      //callbackContext.error("AIDL Service not connected");
       cordova.getThreadPool().execute(new Runnable() {
           public void run() {
-            callbackContext.success("Hola");
+            callbackContext.success("Controller enabled");
           }
       });
+	}
+
+    private void turnOffPrinter(CallbackContext callbackContext) {
+
+      if(mApi!=null){
+		  mPosApi.closeDev();
+      }
+
+      try {
+          FileWriter localFileWriterOn = new FileWriter(new File("/proc/gpiocontrol/set_sam"));
+          localFileWriterOn.write("0");
+          localFileWriterOn.close();
+          callbackContext.success("Controller disabled");
+      } catch (Exception e) {
+          callbackContext.error("Controller can not be disabled");
+          e.printStackTrace();
+      }
 	}
 }

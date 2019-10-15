@@ -9,3 +9,7 @@ exports.coolMethod = function (arg0, success, error) {
 exports.turnOnPrinter = function(args, success, error) {
 	exec(success, error, service, "turnOnPrinter", [args]);
 };
+
+exports.turnOffPrinter = function(args, success, error) {
+	exec(success, error, service, "turnOffPrinter", [args]);
+};
