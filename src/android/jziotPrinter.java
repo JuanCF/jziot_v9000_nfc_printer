@@ -50,48 +50,50 @@ public class jziotPrinter extends CordovaPlugin {
         }
     }
 
-    OnCommEventListener mCommEventListener = new OnCommEventListener() {
-		@Override
-		public void onCommState(int cmdFlag, int state, byte[] resp, int respLen) {
-            Context context = cordova.getActivity().getApplicationContext();
-			// TODO Auto-generated method stub
-			switch(cmdFlag){
-			case PosApi.POS_INIT:
-				if(state==PosApi.COMM_STATUS_SUCCESS){
-					Toast.makeText(context, "Inicialización exitosa", Toast.LENGTH_SHORT).show();
-				}else {
-					Toast.makeText(context, "Inicialización fallida", Toast.LENGTH_SHORT).show();
-				}
-				break;
-			}
-		}
-	};
+    private OnCommEventListener createCommListener(CallbackContext callbackContext){
+        //Create CommEventListener
+        OnCommEventListener mCommEventListener = new OnCommEventListener() {
+          @Override
+          public void onCommState(int cmdFlag, int state, byte[] resp, int respLen) {s
+              // TODO Auto-generated method stub
+              switch(cmdFlag){
+              case PosApi.POS_INIT:
+                  if(state==PosApi.COMM_STATUS_SUCCESS){
+                       callbackContext.success("Controller enabled");
+                  }else {
+                      callbackContext.error("Controller can not enabled");
+                  }
+                  break;
+              }
+          }
+      };
+      return mCommEventListener;
+    }
 
     private void turnOnPrinter(CallbackContext callbackContext) {
-      Context context = cordova.getActivity().getApplicationContext();
 
       try {
           FileWriter localFileWriterOn = new FileWriter(new File("/proc/gpiocontrol/set_sam"));
           localFileWriterOn.write("1");
           localFileWriterOn.close();
       } catch (Exception e) {
-          callbackContext.error("Controller can not enabled");
           e.printStackTrace();
       }
 
+      Context context = cordova.getActivity().getApplicationContext();
       mPosApi = PosApi.getInstance(context);
-      mPosApi.setOnComEventListener(mCommEventListener);
-      mPosApi.initDeviceEx("/dev/ttyMT2");
+
       cordova.getThreadPool().execute(new Runnable() {
           public void run() {
-            callbackContext.success("Controller enabled");
+            mPosApi.setOnComEventListener(createCommListener(callbackContext));
+            mPosApi.initDeviceEx("/dev/ttyMT2");
           }
       });
 	}
 
     private void turnOffPrinter(CallbackContext callbackContext) {
 
-      if(mApi!=null){
+      if(mPosApi!=null){
 		  mPosApi.closeDev();
       }
 
