@@ -57,7 +57,7 @@ public class jziotPrinter extends CordovaPlugin {
         //Create CommEventListener
         OnCommEventListener mCommEventListener = new OnCommEventListener() {
           @Override
-          public void onCommState(int cmdFlag, int state, byte[] resp, int respLen) {s
+          public void onCommState(int cmdFlag, int state, byte[] resp, int respLen) {
               // TODO Auto-generated method stub
               switch(cmdFlag){
               case PosApi.POS_INIT:
