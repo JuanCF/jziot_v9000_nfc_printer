@@ -13,3 +13,7 @@ exports.turnOnPrinter = function(args, success, error) {
 exports.turnOffPrinter = function(args, success, error) {
 	exec(success, error, service, "turnOffPrinter", [args]);
 };
+
+exports.printText = function(args, success, error) {
+	exec(success, error, service, "printText", [args]);
+};
