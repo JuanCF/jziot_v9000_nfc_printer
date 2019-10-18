@@ -2,6 +2,8 @@ package cordova.plugin.jziot;
 
 import java.io.File;
 import java.io.FileWriter;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 
 import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.CallbackContext;
@@ -39,7 +41,7 @@ public class jziotPrinter extends CordovaPlugin {
             this.turnOffPrinter(callbackContext);
             return true;
         }if("printText".equals(action)){
-            this.printBulkData(args, true, callbackContext);
+            this.printBulkData(args.getString(0), callbackContext);
             return true;
         }
         return false;
@@ -283,9 +285,9 @@ public class jziotPrinter extends CordovaPlugin {
           StringBuilder sb =new StringBuilder();
           String text = obj.getString("text");
           Integer align = obj.getInt ("align");
-          byte[]text = null;
-          text =sb.toString().getBytes("UTF-8");
-          addPrintTextWithSize(1, concentration, text);
+          byte[] btUTF8 = null;
+          btUTF8 =sb.toString().getBytes("UTF-8");
+          addPrintTextWithSize(1, concentration, btUTF8);
           mPrintQueue.printStart();
         }catch (Exception e) {
             StringWriter sw = new StringWriter();
