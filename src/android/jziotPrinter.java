@@ -19,10 +19,14 @@ import android.posapi.PosApi.OnCommEventListener;
 import android.zyapi.PrintQueue;
 import android.zyapi.PrintQueue.OnPrintListener;
 
+import android.util.Log;
+
 /**
  * This class echoes a string called from JavaScript.
  */
 public class jziotPrinter extends CordovaPlugin {
+
+    private static final String TAG = "IntermecPR3";
 
     private PosApi mPosApi;
 
@@ -281,6 +285,7 @@ public class jziotPrinter extends CordovaPlugin {
         }*/
 
         try{
+          Log.i(TAG,"Sending to print");
           int  concentration = 60;
           StringBuilder sb =new StringBuilder();
           String text = obj.getString("text");
@@ -289,6 +294,7 @@ public class jziotPrinter extends CordovaPlugin {
           btUTF8 =sb.toString().getBytes("UTF-8");
           addPrintTextWithSize(1, concentration, btUTF8);
           mPrintQueue.printStart();
+          callbackContext.success("Printing");
         }catch (Exception e) {
             StringWriter sw = new StringWriter();
             PrintWriter pw = new PrintWriter(sw);
