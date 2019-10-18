@@ -14,6 +14,6 @@ exports.turnOffPrinter = function(args, success, error) {
 	exec(success, error, service, "turnOffPrinter", [args]);
 };
 
-exports.printText = function(args, success, error) {
-	exec(success, error, service, "printText", [args]);
+exports.printBulkData = function(args, success, error) {
+	exec(success, error, service, "printBulkData", [args]);
 };

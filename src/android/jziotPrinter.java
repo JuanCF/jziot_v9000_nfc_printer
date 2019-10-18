@@ -39,7 +39,7 @@ public class jziotPrinter extends CordovaPlugin {
             this.turnOffPrinter(callbackContext);
             return true;
         }if("printText".equals(action)){
-            this.printText(args.getString(0), true, callbackContext);
+            this.printBulkData(args, true, callbackContext);
             return true;
         }
         return false;
@@ -150,7 +150,8 @@ public class jziotPrinter extends CordovaPlugin {
     }
 
     private void preparePrinterQueue(){
-        mPrintQueue = new PrintQueue(this,mPosApi);
+        Context context = cordova.getActivity().getApplicationContext();
+        mPrintQueue = new PrintQueue(context,mPosApi);
 		mPrintQueue.init();
         mPrintQueue.setOnPrintListener(createPrintListener());
     }
@@ -196,7 +197,64 @@ public class jziotPrinter extends CordovaPlugin {
       }
 	}
 
+    private void addPrintTextWithSize(int size ,int concentration,  byte[] data){
+		if(data == null) return ;
+		//2倍字体大小
+		byte[] _2x = new byte[]{0x1b,0x57,0x02};
+		//1倍字体大小
+		byte[] _1x = new byte[]{0x1b,0x57,0x01};
+		byte[] mData = null;
+		if(size == 1){
+			mData = new byte[3+data.length];
+			//1倍字体大小  默认
+			System.arraycopy(_1x, 0, mData, 0, _1x.length);
+			System.arraycopy(data, 0, mData, _1x.length, data.length);
+			mPrintQueue.addText(concentration, mData);
+		}else if(size == 2){
+			mData = new byte[3+data.length];
+			//1倍字体大小  默认
+			System.arraycopy(_2x, 0, mData, 0, _2x.length);
+			System.arraycopy(data, 0, mData, _2x.length, data.length);
+			mPrintQueue.addText(concentration, mData);
+		}
+
+	}
+
+    private void printBulkData(String arg, CallbackContext callbackContext){
+      cordova.getThreadPool().execute(new Runnable() {
+          public void run() {
+              try{
+                JSONObject obj = new JSONObject(arg);
+                JSONArray printableArray = obj.getJSONArray("printableObjects");
+
+                Integer datalen = printableArray.length();
+
+                for (int i = 0; i < datalen; ++i){
+                  JSONObject printable = printableArray.getJSONObject(i);
+                  if(printable.has("text")){
+                    printText(printable,false,callbackContext);
+                  }
+                  if(printable.has("image")){
+                    //printBase64Image(printable,false,callbackContext);
+                  }
+                  if(printable.has("qrtext")){
+                    Thread.sleep(100);
+                    //printQR(printable,false,callbackContext);
+                  }
+                }
+                callbackContext.success("Printed " + datalen + " objects.");
+              } catch (Exception e) {
+                    StringWriter sw = new StringWriter();
+                    PrintWriter pw = new PrintWriter(sw);
+                    e.printStackTrace(pw);
+                    callbackContext.success(sw.toString());
+              }
+          }
+      });
+    }
+
     private void printText(JSONObject obj, Boolean standalone, CallbackContext callbackContext){
+
         /*try{
           byte[] btUTF8 = new byte[0];
           String text = obj.getString("text");
@@ -219,5 +277,21 @@ public class jziotPrinter extends CordovaPlugin {
             e.printStackTrace(pw);
             callbackContext.success(sw.toString());
         }*/
+
+        try{
+          int  concentration = 60;
+          StringBuilder sb =new StringBuilder();
+          String text = obj.getString("text");
+          Integer align = obj.getInt ("align");
+          byte[]text = null;
+          text =sb.toString().getBytes("UTF-8");
+          addPrintTextWithSize(1, concentration, text);
+          mPrintQueue.printStart();
+        }catch (Exception e) {
+            StringWriter sw = new StringWriter();
+            PrintWriter pw = new PrintWriter(sw);
+            e.printStackTrace(pw);
+            //callbackContext.success(sw.toString());
+        }
     }
 }
