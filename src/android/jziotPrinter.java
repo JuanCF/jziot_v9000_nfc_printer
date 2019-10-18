@@ -44,7 +44,7 @@ public class jziotPrinter extends CordovaPlugin {
         } else if(action.equals("turnOffPrinter")){
             this.turnOffPrinter(callbackContext);
             return true;
-        }if("printText".equals(action)){
+        }if(action.equals("printBulkData")){
             this.printBulkData(args.getString(0), callbackContext);
             return true;
         }
