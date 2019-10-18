@@ -253,45 +253,24 @@ public class jziotPrinter extends CordovaPlugin {
                     StringWriter sw = new StringWriter();
                     PrintWriter pw = new PrintWriter(sw);
                     e.printStackTrace(pw);
-                    callbackContext.success(sw.toString());
+                    callbackContext.error(sw.toString());
               }
           }
       });
     }
 
     private void printText(JSONObject obj, Boolean standalone, CallbackContext callbackContext){
-
-        /*try{
-          byte[] btUTF8 = new byte[0];
-          String text = obj.getString("text");
-          Integer align = obj.getInt ("align");
-          if(mIzkcService.checkPrinterAvailable() == true){
-            mIzkcService.sendRAWData("print", new byte[]{0x1C, 0x43, (byte) 0xFF});
-            printer_available = "Text sent to printer.";
-            mIzkcService.setAlignment(align);
-            btUTF8 = text.getBytes("UTF-8");
-            mIzkcService.sendRAWData("print", btUTF8);
-          }else{
-              printer_available = "Printer not initialized or unavailable.";
-          }
-          if(standalone){
-            callbackContext.success(printer_available);
-          }
-        }catch (Exception e) {
-            StringWriter sw = new StringWriter();
-            PrintWriter pw = new PrintWriter(sw);
-            e.printStackTrace(pw);
-            callbackContext.success(sw.toString());
-        }*/
-
+        // Charset UTF-8 new byte[]{0x1C, 0x43, (byte) 0xFF}
         try{
-          Log.i(TAG,"Sending to print");
+          //Log.i(TAG,"Sending to print");
           int  concentration = 60;
-          StringBuilder sb =new StringBuilder();
+          StringBuilder sb = new StringBuilder();
           String text = obj.getString("text");
           Integer align = obj.getInt ("align");
+          sb.append(text);
           byte[] btUTF8 = null;
           btUTF8 =sb.toString().getBytes("UTF-8");
+          //btUTF8 = sb.toString().getBytes("GBK");
           addPrintTextWithSize(1, concentration, btUTF8);
           mPrintQueue.printStart();
           callbackContext.success("Printing");
@@ -299,7 +278,7 @@ public class jziotPrinter extends CordovaPlugin {
             StringWriter sw = new StringWriter();
             PrintWriter pw = new PrintWriter(sw);
             e.printStackTrace(pw);
-            //callbackContext.success(sw.toString());
+            callbackContext.error(sw.toString());
         }
     }
 }
