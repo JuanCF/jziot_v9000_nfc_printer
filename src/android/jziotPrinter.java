@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.Base64.Decoder;
 
 import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.CallbackContext;
@@ -20,6 +21,8 @@ import android.zyapi.PrintQueue;
 import android.zyapi.PrintQueue.OnPrintListener;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Base64;
+
 
 import cordova.plugin.jziot.util.BitmapTools;
 import cordova.plugin.jziot.util.BarcodeCreater;
@@ -246,10 +249,9 @@ public class jziotPrinter extends CordovaPlugin {
                     printText(printable,false,callbackContext);
                   }
                   if(printable.has("image")){
-                    //printBase64Image(printable,false,callbackContext);
+                    printBase64Image(printable,false,callbackContext);
                   }
                   if(printable.has("qrtext")){
-                    //Thread.sleep(100);
                     printQR(printable,false,callbackContext);
                   }
                 }
@@ -278,9 +280,8 @@ public class jziotPrinter extends CordovaPlugin {
           btUTF8 =sb.toString().getBytes("UTF-8");
           //btUTF8 = sb.toString().getBytes("GBK");
           addPrintTextWithSize(1, concentration, btUTF8);
-          //mPrintQueue.printStart();
           if(standalone){
-            callbackContext.success("Printing");
+            callbackContext.success("Text  sent to printer");
           }
         }catch (Exception e) {
             StringWriter sw = new StringWriter();
@@ -297,10 +298,35 @@ public class jziotPrinter extends CordovaPlugin {
           int  mWidth = 384;
           int  mHeight = 384;
           Bitmap mBitmap = BarcodeCreater.encode2dAsBitmap(qr, mWidth, mHeight, 2);
-          byte[] printData =BitmapTools.bitmap2PrinterBytes(mBitmap);
-          mPrintQueue.addBmp(concentration, 20, mBitmap.getWidth(), mBitmap.getHeight(), printData);
+          byte[] printData = BitmapTools.bitmap2PrinterBytes(mBitmap);
+          mPrintQueue.addBmp(concentration, 10, mBitmap.getWidth(), mBitmap.getHeight(), printData);
           if(standalone){
             callbackContext.success("QR sent to print");
+          }
+        }catch (Exception e) {
+            StringWriter sw = new StringWriter();
+            PrintWriter pw = new PrintWriter(sw);
+            e.printStackTrace(pw);
+            callbackContext.error(sw.toString());
+        }
+    }
+
+    private void printBase64Image(JSONObject obj, Boolean standalone, CallbackContext callbackContext){
+        try{
+          String base64Img = obj.getString("image");
+          int  concentration = 60;
+          int margin_left = 10;
+          if(obj.has("margin_left")){
+            margin_left = obj.getInt("margin_left");
+          }
+          printer_available = "Image sent to printer.";
+          String cleanImage = base64Img.replace("data:image/png;base64,", "").replace("data:image/jpeg;base64,","");
+          byte[] decodedString = Base64.decode(cleanImage, Base64.DEFAULT);
+          mBitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+          byte[] printData = BitmapTools.bitmap2PrinterBytes(mBitmap);
+          mPrintQueue.addBmp(concentration, margin_left, mBitmap.getWidth(), mBitmap.getHeight(), printData);
+          if(standalone){
+            callbackContext.success("Image sent to printer");
           }
         }catch (Exception e) {
             StringWriter sw = new StringWriter();
