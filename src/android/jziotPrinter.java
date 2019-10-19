@@ -18,6 +18,8 @@ import android.posapi.PosApi;
 import android.posapi.PosApi.OnCommEventListener;
 import android.zyapi.PrintQueue;
 import android.zyapi.PrintQueue.OnPrintListener;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 
 import cordova.plugin.jziot.util.BitmapTools;
 
@@ -250,6 +252,7 @@ public class jziotPrinter extends CordovaPlugin {
                     //printQR(printable,false,callbackContext);
                   }
                 }
+                mPrintQueue.printStart();
                 callbackContext.success("Printed " + datalen + " objects.");
               } catch (Exception e) {
                     StringWriter sw = new StringWriter();
@@ -274,8 +277,30 @@ public class jziotPrinter extends CordovaPlugin {
           btUTF8 =sb.toString().getBytes("UTF-8");
           //btUTF8 = sb.toString().getBytes("GBK");
           addPrintTextWithSize(1, concentration, btUTF8);
-          mPrintQueue.printStart();
-          callbackContext.success("Printing");
+          //mPrintQueue.printStart();
+          if(standalone){
+            callbackContext.success("Printing");
+          }
+        }catch (Exception e) {
+            StringWriter sw = new StringWriter();
+            PrintWriter pw = new PrintWriter(sw);
+            e.printStackTrace(pw);
+            callbackContext.error(sw.toString());
+        }
+    }
+
+    private void printQR(JSONObject obj, Boolean standalone, CallbackContext callbackContext){
+        try{
+          String qr = obj.getString("qrtext");
+          int  concentration = 60;
+          int  mWidth = 384;
+          int  mHeight = 384;
+          Bitmap mBitmap = BarcodeCreater.encode2dAsBitmap(qr, mWidth, mHeight, 2);
+          byte[] printData =BitmapTools.bitmap2PrinterBytes(mBitmap);
+          mPrintQueue.addBmp(concentration, 30, mBitmap.getWidth(), mBitmap.getHeight(), printData);
+          if(standalone){
+            callbackContext.success("QR sent to print");
+          }
         }catch (Exception e) {
             StringWriter sw = new StringWriter();
             PrintWriter pw = new PrintWriter(sw);

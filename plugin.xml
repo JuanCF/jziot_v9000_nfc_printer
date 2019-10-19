@@ -16,6 +16,8 @@
     <framework custom="true" src="src/android/build.gradle" type="gradleReference" />
     <source-file src="src/android/jziotPrinter.java" target-dir="src/cordova-plugin-jziot/jziotPrinter" />
     <source-file src="src/android/util/BitmapTools.java" target-dir="src/cordova-plugin-jziot/jziotPrinter/util" />
+    <source-file src="src/android/util/BarcodeCreater.java" target-dir="src/cordova-plugin-jziot/jziotPrinter/util" />
+    <source-file src="src/android/util/ByteTools.java" target-dir="src/cordova-plugin-jziot/jziotPrinter/util" />
     <source-file src="src/android/zyapi/CommonApi.java" target-dir="src/android/zyapi/" />
     <source-file src="src/android/zyapi/IcEx.java" target-dir="src/android/zyapi/" />
     <source-file src="src/android/zyapi/PrintQueue.java" target-dir="src/android/zyapi/" />

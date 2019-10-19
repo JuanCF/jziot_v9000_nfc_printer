@@ -1,4 +1,4 @@
-package com.printexample.miniprinter.util;
+package cordova.plugin.jziot.util;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
