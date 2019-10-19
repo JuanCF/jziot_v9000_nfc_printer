@@ -22,6 +22,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
 import cordova.plugin.jziot.util.BitmapTools;
+import cordova.plugin.jziot.util.BarcodeCreater;
 
 //import android.util.Log;
 

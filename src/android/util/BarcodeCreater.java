@@ -166,7 +166,8 @@ public abstract class BarcodeCreater {
 		Canvas cv = new Canvas(newBitmap);
 		cv.drawBitmap(first, 0, 0, null);
 		cv.drawBitmap(second, fromPoint.x, fromPoint.y, null);
-		cv.save(Canvas.ALL_SAVE_FLAG);
+		//cv.save(Canvas.ALL_SAVE_FLAG);
+        cv.save();
 		cv.restore();
 
 		return newBitmap;
