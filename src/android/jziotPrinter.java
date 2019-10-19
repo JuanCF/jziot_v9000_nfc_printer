@@ -40,6 +40,8 @@ public class jziotPrinter extends CordovaPlugin {
 
     private PrintQueue mPrintQueue = null;
 
+    private Bitmap mBitmap = null;
+
     @Override
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
         if (action.equals("coolMethod")) {
@@ -297,7 +299,7 @@ public class jziotPrinter extends CordovaPlugin {
           int  concentration = 60;
           int  mWidth = 384;
           int  mHeight = 384;
-          Bitmap mBitmap = BarcodeCreater.encode2dAsBitmap(qr, mWidth, mHeight, 2);
+          mBitmap = BarcodeCreater.encode2dAsBitmap(qr, mWidth, mHeight, 2);
           byte[] printData = BitmapTools.bitmap2PrinterBytes(mBitmap);
           mPrintQueue.addBmp(concentration, 10, mBitmap.getWidth(), mBitmap.getHeight(), printData);
           if(standalone){
@@ -319,7 +321,6 @@ public class jziotPrinter extends CordovaPlugin {
           if(obj.has("margin_left")){
             margin_left = obj.getInt("margin_left");
           }
-          printer_available = "Image sent to printer.";
           String cleanImage = base64Img.replace("data:image/png;base64,", "").replace("data:image/jpeg;base64,","");
           byte[] decodedString = Base64.decode(cleanImage, Base64.DEFAULT);
           mBitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
