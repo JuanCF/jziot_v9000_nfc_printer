@@ -249,7 +249,7 @@ public class jziotPrinter extends CordovaPlugin {
                   }
                   if(printable.has("qrtext")){
                     Thread.sleep(100);
-                    //printQR(printable,false,callbackContext);
+                    printQR(printable,false,callbackContext);
                   }
                 }
                 mPrintQueue.printStart();
