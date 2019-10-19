@@ -249,7 +249,7 @@ public class jziotPrinter extends CordovaPlugin {
                     //printBase64Image(printable,false,callbackContext);
                   }
                   if(printable.has("qrtext")){
-                    Thread.sleep(100);
+                    //Thread.sleep(100);
                     printQR(printable,false,callbackContext);
                   }
                 }
@@ -298,7 +298,7 @@ public class jziotPrinter extends CordovaPlugin {
           int  mHeight = 384;
           Bitmap mBitmap = BarcodeCreater.encode2dAsBitmap(qr, mWidth, mHeight, 2);
           byte[] printData =BitmapTools.bitmap2PrinterBytes(mBitmap);
-          mPrintQueue.addBmp(concentration, 30, mBitmap.getWidth(), mBitmap.getHeight(), printData);
+          mPrintQueue.addBmp(concentration, 20, mBitmap.getWidth(), mBitmap.getHeight(), printData);
           if(standalone){
             callbackContext.success("QR sent to print");
           }
