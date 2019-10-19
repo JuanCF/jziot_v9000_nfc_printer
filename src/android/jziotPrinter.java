@@ -299,9 +299,13 @@ public class jziotPrinter extends CordovaPlugin {
           int  concentration = 60;
           int  mWidth = 384;
           int  mHeight = 384;
+          int margin_left = 10;
+          if(obj.has("margin_left")){
+            margin_left = obj.getInt("margin_left");
+          }
           mBitmap = BarcodeCreater.encode2dAsBitmap(qr, mWidth, mHeight, 2);
           byte[] printData = BitmapTools.bitmap2PrinterBytes(mBitmap);
-          mPrintQueue.addBmp(concentration, 10, mBitmap.getWidth(), mBitmap.getHeight(), printData);
+          mPrintQueue.addBmp(concentration, margin_left, mBitmap.getWidth(), mBitmap.getHeight(), printData);
           if(standalone){
             callbackContext.success("QR sent to print");
           }
