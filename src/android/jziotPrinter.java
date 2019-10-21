@@ -198,6 +198,14 @@ public class jziotPrinter extends CordovaPlugin {
 
     private void turnOffPrinter(CallbackContext callbackContext) {
 
+      if(mBitmap!=null){
+          mBitmap.recycle();
+      }
+
+      if(mPrintQueue!=null){
+          mPrintQueue.close();
+      }
+
       if(mPosApi!=null){
 		  mPosApi.closeDev();
       }
