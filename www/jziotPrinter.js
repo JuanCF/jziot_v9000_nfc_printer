@@ -2,8 +2,8 @@ var exec = require('cordova/exec');
 
 var service = 'jziotPrinter';
 
-exports.coolMethod = function (arg0, success, error) {
-    exec(success, error, service, 'coolMethod', [arg0]);
+exports.testMethod = function (arg0, success, error) {
+    exec(success, error, service, 'testMethod', [arg0]);
 };
 
 exports.turnOnPrinter = function(args, success, error) {

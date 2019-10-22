@@ -44,9 +44,9 @@ public class jziotPrinter extends CordovaPlugin {
 
     @Override
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
-        if (action.equals("coolMethod")) {
+        if (action.equals("testMethod")) {
             String message = args.getString(0);
-            this.coolMethod(message, callbackContext);
+            this.testMethod(message, callbackContext);
             return true;
         } else if(action.equals("turnOnPrinter")){
             this.turnOnPrinter(callbackContext);
@@ -61,7 +61,7 @@ public class jziotPrinter extends CordovaPlugin {
         return false;
     }
 
-    private void coolMethod(String message, CallbackContext callbackContext) {
+    private void testMethod(String message, CallbackContext callbackContext) {
         if (message != null && message.length() > 0) {
             callbackContext.success(message);
         } else {
@@ -210,6 +210,7 @@ public class jziotPrinter extends CordovaPlugin {
           public void run() {
             if(mPosApi!=null){
 		      mPosApi.closeDev();
+              mPosApi = null;
             }
           }
       });
@@ -336,6 +337,9 @@ public class jziotPrinter extends CordovaPlugin {
           int margin_left = 10;
           if(obj.has("margin_left")){
             margin_left = obj.getInt("margin_left");
+          }
+          if(obj.has("concentration")){
+            concentration = obj.getInt("concentration");
           }
           String cleanImage = base64Img.replace("data:image/png;base64,", "").replace("data:image/jpeg;base64,","");
           byte[] decodedString = Base64.decode(cleanImage, Base64.DEFAULT);
