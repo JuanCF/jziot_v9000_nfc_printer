@@ -27,6 +27,8 @@
     <source-file src="src/android/jniLibs/armeabi/libzyapi_common.so" target-dir="jniLibs/armeabi/" />
     <source-file src="src/android/jniLibs/armeabi/libPosApi.so" target-dir="jniLibs/armeabi-v7a/" />
     <source-file src="src/android/jniLibs/armeabi/libzyapi_common.so" target-dir="jniLibs/armeabi-v7a/" />
+    <source-file src="src/android/jniLibs/armeabi/libPosApi.so" target-dir="jniLibs/armeabi-v8a/" />
+    <source-file src="src/android/jniLibs/armeabi/libzyapi_common.so" target-dir="jniLibs/armeabi-v8a/" />
     <!-- Only for Cordova android 7, not correctly loading jniLibs -->
     <!--<source-file src="src/android/jniLibs/armeabi/libPosApi.so" target-dir="app/src/main/jniLibs/armeabi-v7a/" />
     <source-file src="src/android/jniLibs/armeabi/libzyapi_common.so" target-dir="app/src/main/jniLibs/armeabi-v7a/" />-->
