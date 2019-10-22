@@ -206,9 +206,13 @@ public class jziotPrinter extends CordovaPlugin {
           mPrintQueue.close();
       }
 
-      if(mPosApi!=null){
-		  mPosApi.closeDev();
-      }
+      cordova.getThreadPool().execute(new Runnable() {
+          public void run() {
+            if(mPosApi!=null){
+		      mPosApi.closeDev();
+            }
+          }
+      });
 
       try {
           FileWriter localFileWriterOn = new FileWriter(new File("/proc/gpiocontrol/set_sam"));
