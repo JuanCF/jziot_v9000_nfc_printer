@@ -313,14 +313,18 @@ public class jziotPrinter extends CordovaPlugin {
         return textToJustify;
       }else{
         if(textLength < 32){
-          int length = 32 - textLength;
+          int length = 16;
           switch(align) {
             case 0:
               justifiedText = textToJustify;
               break;
             case 1:
-              //return String.format("%1$"+length+ "s", textToJustify);
-             justifiedText = textToJustify;
+              if(textLength % 2 == 0){
+                length += textLength / 2;
+              }else{
+                length += textLength / 2 + 1;
+              }
+              justifiedText = String.format("%1$"+length+ "s", textToJustify);
               break;
             case 2:
               justifiedText = String.format("%1$32s", textToJustify);
