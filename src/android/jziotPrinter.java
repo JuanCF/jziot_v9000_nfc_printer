@@ -308,6 +308,7 @@ public class jziotPrinter extends CordovaPlugin {
 
     private String justificateText(Integer align, String textToJustify){
       int textLength = textToJustify.length();
+      String justifiedText;
       if(textLength == 32){
         return textToJustify;
       }else{
@@ -315,23 +316,24 @@ public class jziotPrinter extends CordovaPlugin {
           int length = 32 - textLength;
           switch(align) {
             case 0:
-              return textToJustify;
+              justifiedText = textToJustify;
               break;
             case 1:
               //return String.format("%1$"+length+ "s", textToJustify);
-              return textToJustify;
+             justifiedText = textToJustify;
               break;
             case 2:
-              return String.format("%1$32s", textToJustify);
+              justifiedText = String.format("%1$32s", textToJustify);
               break;
             default:
-               return textToJustify;
+               justifiedText = textToJustify;
           }
         }else{
           //Add code here to cut string into slices of 32 or less
-          return textToJustify;
+          justifiedText = textToJustify;
         }
       }
+      return justifiedText;
     }
 
     private void printQR(JSONObject obj, Boolean standalone, CallbackContext callbackContext){
