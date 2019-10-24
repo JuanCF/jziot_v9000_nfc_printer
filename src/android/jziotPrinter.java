@@ -34,7 +34,7 @@ import cordova.plugin.jziot.util.BarcodeCreater;
  */
 public class jziotPrinter extends CordovaPlugin {
 
-    private static final String TAG = "IntermecPR3";
+    private static final String TAG = "jziotPrinter";
 
     private PosApi mPosApi;
 
@@ -308,7 +308,7 @@ public class jziotPrinter extends CordovaPlugin {
 
     private String justificateText(Integer align, String textToJustify){
       int textLength = textToJustify.length();
-      String justifiedText;
+      String justifiedText = "";
       if(textLength == 32){
         return textToJustify;
       }else{
@@ -325,6 +325,8 @@ public class jziotPrinter extends CordovaPlugin {
                 length += textLength / 2 + 1;
               }
               justifiedText = String.format("%1$"+length+ "s", textToJustify);
+              justifiedText = String.format("%1$-32s", justifiedText);
+              //Log.i(TAG,justifiedText);
               break;
             case 2:
               justifiedText = String.format("%1$32s", textToJustify);
