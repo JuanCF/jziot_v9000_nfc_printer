@@ -184,8 +184,6 @@ public class jziotPrinter extends CordovaPlugin {
 
       Context context = cordova.getActivity().getApplicationContext();
       mPosApi = PosApi.getInstance(context);
-      mPrintQueue = new PrintQueue(context, mPosApi);
-      mPrintQueue.init();
 
       cordova.getThreadPool().execute(new Runnable() {
           public void run() {
