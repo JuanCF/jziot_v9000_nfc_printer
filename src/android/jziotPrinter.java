@@ -8,6 +8,8 @@ import java.util.Base64.Decoder;
 
 import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.CallbackContext;
+import org.apache.cordova.CordovaInterface;
+import org.apache.cordova.CordovaWebView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -42,6 +44,59 @@ public class jziotPrinter extends CordovaPlugin {
 
     private Bitmap mBitmap = null;
 
+    /*@Override
+    public void initialize(CordovaInterface cordova, CordovaWebView webView) {
+      super.initialize(cordova, webView);
+
+      try {
+          FileWriter localFileWriterOn = new FileWriter(new File("/proc/gpiocontrol/set_sam"));
+          localFileWriterOn.write("1");
+          localFileWriterOn.close();
+      } catch (Exception e) {
+          e.printStackTrace();
+      }
+
+      Context context = cordova.getActivity().getApplicationContext();
+      mPosApi = PosApi.getInstance(context);
+
+      cordova.getThreadPool().execute(new Runnable() {
+          public void run() {
+            mPosApi.setOnComEventListener(createCommListener(callbackContext));
+            mPosApi.initDeviceEx("/dev/ttyMT2");
+            preparePrinterQueue();
+          }
+      });
+    }*/
+
+    /*@Override
+    public void onDestroy() {
+      //super.onDestroy();
+
+      if(mBitmap!=null){
+          mBitmap.recycle();
+      }
+
+      if(mPrintQueue!=null){
+          mPrintQueue.close();
+      }
+
+      cordova.getThreadPool().execute(new Runnable() {
+          public void run() {
+            if(mPosApi!=null){
+		      mPosApi.closeDev();
+            }
+          }
+      });
+
+      try {
+          FileWriter localFileWriterOn = new FileWriter(new File("/proc/gpiocontrol/set_sam"));
+          localFileWriterOn.write("0");
+          localFileWriterOn.close();
+      } catch (Exception e) {
+          e.printStackTrace();
+      }
+    }*/
+
     @Override
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
         if (action.equals("testMethod")) {
@@ -67,6 +122,26 @@ public class jziotPrinter extends CordovaPlugin {
         } else {
             callbackContext.error("Expected one non-empty string argument.");
         }
+    }
+
+    private OnCommEventListener createCommListener(Context context){
+        //Create CommEventListener
+        OnCommEventListener mCommEventListener = new OnCommEventListener() {
+          @Override
+          public void onCommState(int cmdFlag, int state, byte[] resp, int respLen) {
+              // TODO Auto-generated method stub
+              switch(cmdFlag){
+              case PosApi.POS_INIT:
+                  if(state==PosApi.COMM_STATUS_SUCCESS){
+                       Toast.makeText(context, "Inicialización exitosa", Toast.LENGTH_SHORT).show();
+                  }else {
+                      Toast.makeText(context, "Inicialización exitosa", Toast.LENGTH_SHORT).show();
+                  }
+                  break;
+              }
+          }
+      };
+      return mCommEventListener;
     }
 
     private OnCommEventListener createCommListener(CallbackContext callbackContext){
