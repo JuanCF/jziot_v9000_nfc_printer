@@ -44,7 +44,7 @@ public class jziotPrinter extends CordovaPlugin {
 
     private Bitmap mBitmap = null;
 
-    /*@Override
+    @Override
     public void initialize(CordovaInterface cordova, CordovaWebView webView) {
       super.initialize(cordova, webView);
 
@@ -63,22 +63,22 @@ public class jziotPrinter extends CordovaPlugin {
           public void run() {
             mPosApi.setOnComEventListener(createCommListener(callbackContext));
             mPosApi.initDeviceEx("/dev/ttyMT2");
-            preparePrinterQueue();
+            //preparePrinterQueue();
           }
       });
-    }*/
+    }
 
-    /*@Override
+    @Override
     public void onDestroy() {
       //super.onDestroy();
 
-      if(mBitmap!=null){
+      /*if(mBitmap!=null){
           mBitmap.recycle();
       }
 
       if(mPrintQueue!=null){
           mPrintQueue.close();
-      }
+      }*/
 
       cordova.getThreadPool().execute(new Runnable() {
           public void run() {
@@ -95,7 +95,7 @@ public class jziotPrinter extends CordovaPlugin {
       } catch (Exception e) {
           e.printStackTrace();
       }
-    }*/
+    }
 
     @Override
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
