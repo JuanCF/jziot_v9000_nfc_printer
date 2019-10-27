@@ -29,7 +29,7 @@ import android.util.Base64;
 import cordova.plugin.jziot.util.BitmapTools;
 import cordova.plugin.jziot.util.BarcodeCreater;
 
-//import android.util.Log;
+import android.util.Log;
 
 /**
  * This class echoes a string called from JavaScript.
@@ -61,7 +61,7 @@ public class jziotPrinter extends CordovaPlugin {
 
       cordova.getThreadPool().execute(new Runnable() {
           public void run() {
-            mPosApi.setOnComEventListener(createCommListener(callbackContext));
+            mPosApi.setOnComEventListener(createCommListener(context));
             mPosApi.initDeviceEx("/dev/ttyMT2");
             //preparePrinterQueue();
           }
@@ -70,7 +70,6 @@ public class jziotPrinter extends CordovaPlugin {
 
     @Override
     public void onDestroy() {
-      //super.onDestroy();
 
       /*if(mBitmap!=null){
           mBitmap.recycle();
@@ -95,6 +94,8 @@ public class jziotPrinter extends CordovaPlugin {
       } catch (Exception e) {
           e.printStackTrace();
       }
+
+      super.onDestroy();
     }
 
     @Override
@@ -249,7 +250,7 @@ public class jziotPrinter extends CordovaPlugin {
 
     private void turnOnPrinter(CallbackContext callbackContext) {
 
-      try {
+      /*try {
           FileWriter localFileWriterOn = new FileWriter(new File("/proc/gpiocontrol/set_sam"));
           localFileWriterOn.write("1");
           localFileWriterOn.close();
@@ -266,6 +267,14 @@ public class jziotPrinter extends CordovaPlugin {
             mPosApi.initDeviceEx("/dev/ttyMT2");
             preparePrinterQueue();
           }
+      });*/
+
+      cordova.getThreadPool().execute(new Runnable() {
+          public void run() {
+            preparePrinterQueue();
+            Thread.sleep(1000);
+            callbackContext.success("Controller enabled");
+          }
       });
 	}
 
@@ -277,9 +286,12 @@ public class jziotPrinter extends CordovaPlugin {
 
       if(mPrintQueue!=null){
           mPrintQueue.close();
+          mPrintQueue = null
       }
 
-      cordova.getThreadPool().execute(new Runnable() {
+      callbackContext.success("Controller disabled");
+
+      /*cordova.getThreadPool().execute(new Runnable() {
           public void run() {
             if(mPosApi!=null){
 		      mPosApi.closeDev();
@@ -296,7 +308,7 @@ public class jziotPrinter extends CordovaPlugin {
       } catch (Exception e) {
           callbackContext.error("Controller can not be disabled");
           e.printStackTrace();
-      }
+      }*/
 	}
 
     private void addPrintTextWithSize(int size ,int concentration,  byte[] data){
