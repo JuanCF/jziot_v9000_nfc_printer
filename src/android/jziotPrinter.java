@@ -271,9 +271,16 @@ public class jziotPrinter extends CordovaPlugin {
 
       cordova.getThreadPool().execute(new Runnable() {
           public void run() {
-            preparePrinterQueue();
-            Thread.sleep(1000);
-            callbackContext.success("Controller enabled");
+            try{
+                preparePrinterQueue();
+                Thread.sleep(1000);
+                callbackContext.success("Controller enabled");
+            } catch (Exception e) {
+                StringWriter sw = new StringWriter();
+                PrintWriter pw = new PrintWriter(sw);
+                e.printStackTrace(pw);
+                callbackContext.error(sw.toString());
+            }
           }
       });
 	}
@@ -286,7 +293,7 @@ public class jziotPrinter extends CordovaPlugin {
 
       if(mPrintQueue!=null){
           mPrintQueue.close();
-          mPrintQueue = null
+          mPrintQueue = null;
       }
 
       callbackContext.success("Controller disabled");
