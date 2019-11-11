@@ -444,6 +444,12 @@ public class jziotPrinter extends CordovaPlugin {
           if(obj.has("margin_left")){
             margin_left = obj.getInt("margin_left");
           }
+          if(obj.has("width")){
+            mWidth = obj.getInt("width");
+          }
+          if(obj.has("height")){
+            mHeight = obj.getInt("height");
+          }
           mBitmap = BarcodeCreater.encode2dAsBitmap(qr, mWidth, mHeight, 2);
           byte[] printData = BitmapTools.bitmap2PrinterBytes(mBitmap);
           mPrintQueue.addBmp(concentration, margin_left, mBitmap.getWidth(), mBitmap.getHeight(), printData);
