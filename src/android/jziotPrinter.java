@@ -366,7 +366,7 @@ public class jziotPrinter extends CordovaPlugin {
                 public void onFailed(int state) {
 
                 }
-            }
+            };
 
             mPrintQueue.setOnPrintListener(printListener);
 
