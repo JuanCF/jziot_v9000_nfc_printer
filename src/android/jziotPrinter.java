@@ -244,8 +244,7 @@ public class jziotPrinter extends CordovaPlugin {
     private void preparePrinterQueue(){
         Context context = cordova.getActivity().getApplicationContext();
         mPrintQueue = new PrintQueue(context,mPosApi);
-		mPrintQueue.init();
-        mPrintQueue.setOnPrintListener(createPrintListener());
+		    mPrintQueue.init();
     }
 
     private void turnOnPrinter(CallbackContext callbackContext) {
@@ -344,6 +343,34 @@ public class jziotPrinter extends CordovaPlugin {
     private void printBulkData(String arg, CallbackContext callbackContext){
       cordova.getThreadPool().execute(new Runnable() {
           public void run() {
+
+            OnPrintListener printListener = new OnPrintListener() {
+
+                @Override
+                public void onGetState(int state) {
+                }
+
+                @Override
+                public void onPrinterSetting(int state) {
+                }
+
+                @Override
+                public void onFinish() {
+                    // TODO Auto-generated method stub
+                    //mPosApi.gpioControl((byte)0x23,2,0);
+                    callbackContext.success("PENE");
+                    Toast.makeText(context, "Impresión completada", Toast.LENGTH_SHORT).show();
+                }
+
+                @Override
+                public void onFailed(int state) {
+
+                }
+            }
+
+            mPrintQueue.setOnPrintListener(printListener);
+
+
               try{
                 JSONObject obj = new JSONObject(arg);
                 JSONArray printableArray = obj.getJSONArray("printableObjects");
@@ -363,7 +390,7 @@ public class jziotPrinter extends CordovaPlugin {
                   }
                 }
                 mPrintQueue.printStart();
-                callbackContext.success("Printed " + datalen + " objects.");
+                //callbackContext.success("Printed " + datalen + " objects.");
               } catch (Exception e) {
                     StringWriter sw = new StringWriter();
                     PrintWriter pw = new PrintWriter(sw);

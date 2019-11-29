@@ -141,7 +141,12 @@ public class PrintQueue {
 
 	public void  printNext(){
 		log("Print Queue printNext");
-		if(mSendList==null) return ;
+		if(mSendList==null||mSendList.size() == 0){
+			if(mListener!=null){
+				mListener.onFinish();
+			}
+			return ;
+		}
 		if(!mSendList.isEmpty()){
 			mSendList.removeFirst();
 		}
