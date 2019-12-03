@@ -165,7 +165,7 @@ public class jziotPrinter extends CordovaPlugin {
       return mCommEventListener;
     }
 
-    private OnPrintListener createPrintListener(){
+    private OnPrintListener createPrintListener(CallbackContext callbackContext){
 
       Context context = cordova.getActivity().getApplicationContext();
 
@@ -175,17 +175,12 @@ public class jziotPrinter extends CordovaPlugin {
 			public void onGetState(int state) {
 				switch(state){
 					case 0:
-
 						//有纸
 						Toast.makeText(context, "Impresora Ok", Toast.LENGTH_SHORT).show();
-
 						break;
-
 					case 1:
-
 						//缺纸
 						Toast.makeText(context, "Sin papel", Toast.LENGTH_SHORT).show();
-
 						break;
 
 				}
@@ -210,7 +205,11 @@ public class jziotPrinter extends CordovaPlugin {
 			public void onFinish() {
 				// TODO Auto-generated method stub
 				//mPosApi.gpioControl((byte)0x23,2,0);
-				Toast.makeText(context, "Impresión completada", Toast.LENGTH_SHORT).show();
+        if (callbackContext != null){
+          callbackContext.success("PRINT_FINISHED");
+        }else{
+				  Toast.makeText(context, "Impresión completada", Toast.LENGTH_SHORT).show();
+        }
 			}
 
 			@Override
@@ -222,18 +221,30 @@ public class jziotPrinter extends CordovaPlugin {
 					case PosApi.ERR_POS_PRINT_NO_PAPER:
 						//打印缺纸
 						//showTip(getString(R.string.print_no_paper));
+            if (callbackContext != null){
+              callbackContext.error("NO_PAPER");
+            }
 						break;
 					case PosApi.ERR_POS_PRINT_FAILED:
 						//打印失败
 						//showTip(getString(R.string.print_failed));
+            if (callbackContext != null){
+              callbackContext.error("PRINT_FAILED");
+            }
 						break;
 					case PosApi.ERR_POS_PRINT_VOLTAGE_LOW:
 						//电压过低
 						//showTip(getString(R.string.print_voltate_low));
+            if (callbackContext != null){
+              callbackContext.error("VOLTAGE_LOW");
+            }
 						break;
 					case PosApi.ERR_POS_PRINT_VOLTAGE_HIGH:
 						//电压过高
 						//showTip(getString(R.string.print_voltate_high));
+            if (callbackContext != null){
+              callbackContext.error("VOLTAGE_HIGH");
+            }
 						break;
 				}
 			}
@@ -244,8 +255,8 @@ public class jziotPrinter extends CordovaPlugin {
     private void preparePrinterQueue(){
         Context context = cordova.getActivity().getApplicationContext();
         mPrintQueue = new PrintQueue(context,mPosApi);
-		mPrintQueue.init();
-        mPrintQueue.setOnPrintListener(createPrintListener());
+		    mPrintQueue.init();
+        mPrintQueue.setOnPrintListener(createPrintListener(null));
     }
 
     private void turnOnPrinter(CallbackContext callbackContext) {
@@ -344,6 +355,7 @@ public class jziotPrinter extends CordovaPlugin {
     private void printBulkData(String arg, CallbackContext callbackContext){
       cordova.getThreadPool().execute(new Runnable() {
           public void run() {
+              mPrintQueue.setOnPrintListener(createPrintListener(callbackContext));
               try{
                 JSONObject obj = new JSONObject(arg);
                 JSONArray printableArray = obj.getJSONArray("printableObjects");
@@ -363,7 +375,6 @@ public class jziotPrinter extends CordovaPlugin {
                   }
                 }
                 mPrintQueue.printStart();
-                callbackContext.success("Printed " + datalen + " objects.");
               } catch (Exception e) {
                     StringWriter sw = new StringWriter();
                     PrintWriter pw = new PrintWriter(sw);
