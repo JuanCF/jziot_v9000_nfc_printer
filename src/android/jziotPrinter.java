@@ -32,7 +32,7 @@ import cordova.plugin.jziot.util.BarcodeCreater;
 import android.util.Log;
 
 /**
- * This class echoes a string called from JavaScript.
+ * This class echoes a string called from JavaScript
  */
 public class jziotPrinter extends CordovaPlugin {
 
